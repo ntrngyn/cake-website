@@ -1,0 +1,59 @@
+/* src/components/layout/Navbar.module.css */
+
+/* Chỉ giữ lại các style cho các phần tử con */
+
+.logo {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.navLink {
+  font-weight: 500;
+  transition: color 0.2s ease;
+  color: var(--text-dark);
+  text-decoration: none;
+}
+
+.navLink:hover {
+  color: var(--primary-color);
+}
+
+.iconButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+}
+
+.iconButton:hover {
+  color: var(--primary-color);
+}
+
+.cartCount {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: var(--accent-color);
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 0.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+/* Ẩn bớt trên mobile, MUI sẽ xử lý sau */
+@media (max-width: 900px) {
+  .navLinks {
+    display: none;
+  }
+}

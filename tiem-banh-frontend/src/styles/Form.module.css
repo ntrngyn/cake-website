@@ -1,0 +1,71 @@
+/* src/styles/Form.module.css */
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(
+    100vh - 80px
+  ); /* Lấy chiều cao màn hình trừ đi chiều cao header */
+  padding: 3rem 1rem;
+
+  /* --- THÊM ẢNH NỀN --- */
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    ),
+    url("../assets/form/form.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.formWrapper {
+  max-width: 450px;
+  width: 100%;
+  padding: 2.5rem 3rem;
+  background-color: rgba(255, 255, 255, 0.9); /* Nền trắng hơi trong suốt */
+  backdrop-filter: blur(10px); /* Hiệu ứng kính mờ */
+
+  /* --- BO TRÒN VÀ ĐỔ BÓNG TINH TẾ HƠN --- */
+  border-radius: 16px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.title {
+  font-family: var(--font-heading) !important;
+  text-align: center;
+  margin-bottom: 2rem !important;
+  color: var(--text-dark);
+}
+
+.submitButton {
+  margin-top: 1.5rem !important;
+  padding: 0.9rem !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  border-radius: 8px !important;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.submitButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(212, 163, 115, 0.4) !important;
+}
+
+.footerText {
+  margin-top: 1.5rem !important;
+  text-align: center;
+  color: var(--text-light);
+}
+
+.footerLink {
+  color: var(--primary-color);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footerLink:hover {
+  text-decoration: underline;
+}

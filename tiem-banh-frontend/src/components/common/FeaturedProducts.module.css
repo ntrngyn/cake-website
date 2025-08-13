@@ -1,0 +1,41 @@
+/* src/components/common/FeaturedProducts.module.css */
+.section {
+  padding: 4rem 5%;
+  text-align: center;
+  background-color: var(--white);
+}
+
+.title {
+  margin-bottom: 1rem !important; /* Dùng !important để ghi đè style mặc định của MUI */
+  font-size: 2.5rem !important;
+  position: relative; /* Thêm để tạo gạch chân giả */
+  display: inline-block; /* Để gạch chân chỉ dài bằng chữ */
+  padding-bottom: 0.5rem;
+}
+
+/* Thêm gạch chân trang trí */
+.title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background-color: var(--primary-color);
+}
+
+.subtitle {
+  max-width: 600px;
+  margin: 0 auto 3rem auto !important;
+  color: var(--text-light);
+}
+
+.loading,
+.error {
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+}

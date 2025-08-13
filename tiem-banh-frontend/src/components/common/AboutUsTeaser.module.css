@@ -1,0 +1,32 @@
+/* src/components/common/AboutUsTeaser.module.css */
+.section {
+  background-color: var(--white); /* Nền trắng để nổi bật */
+  padding: 4rem 5%;
+}
+
+.image {
+  width: 100%; /* Đảm bảo ảnh chiếm 100% chiều rộng của thẻ cha (Grid item) */
+  height: auto; /* Chiều cao tự động điều chỉnh để giữ đúng tỷ lệ */
+  display: block; /* Loại bỏ khoảng trống thừa bên dưới ảnh */
+  border-radius: 8px;
+  object-fit: cover;
+  text-align: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.title {
+  font-family: var(--font-heading);
+  margin-bottom: 1.5rem !important;
+  color: var(--primary-color) !important;
+}
+
+.text {
+  color: var(--text-light);
+  margin-bottom: 2rem !important;
+}
