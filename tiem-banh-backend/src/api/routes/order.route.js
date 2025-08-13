@@ -6,12 +6,7 @@ const orderController = require("../controllers/order.controller");
 const { verifyToken, authorize } = require("../middlewares/auth.middleware");
 
 const customerRole = ["KhachHang"];
-const employeeRoles = [
-  "Admin",
-  "Quản lý",
-  "Nhân viên bán hàng",
-  "Thợ làm bánh",
-];
+const employeeRoles = ["Admin", "Quản lý", "Nhân viên bán hàng"];
 
 // POST /api/orders - Khách hàng tạo đơn hàng
 router.post(

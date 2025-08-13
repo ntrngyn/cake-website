@@ -30,6 +30,7 @@ import CategoryManagementPage from "../pages/admin/CategoryManagementPage";
 import IngredientManagementPage from "../pages/admin/IngredientManagementPage";
 import StockInHistoryPage from "../pages/admin/StockInHistoryPage";
 import ProductionHistoryPage from "../pages/admin/ProductionHistoryPage";
+import UserManagementPage from "../pages/admin/UserManagementPage";
 
 // Định nghĩa các vai trò được phép vào trang quản trị
 const employeeRoles = [
@@ -64,6 +65,7 @@ export const router = createBrowserRouter([
           { path: "ingredients", element: <IngredientManagementPage /> },
           { path: "inventory", element: <StockInHistoryPage /> },
           { path: "production", element: <ProductionHistoryPage /> },
+          { path: "users", element: <UserManagementPage /> },
         ],
       },
 

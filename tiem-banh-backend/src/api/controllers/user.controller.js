@@ -35,7 +35,9 @@ const updateMyProfile = async (req, res, next) => {
 
 const getAllCustomers = async (req, res, next) => {
   try {
+    // Gọi hàm service mà không truyền tham số
     const customers = await userService.getAllCustomers();
+    // Trả về dữ liệu theo đúng cấu trúc { data: [...] }
     res.status(200).json({ data: customers });
   } catch (error) {
     next(error);
@@ -66,11 +68,22 @@ const updateCustomer = async (req, res, next) => {
   }
 };
 
+const deleteCustomer = async (req, res, next) => {
+  try {
+    const result = await userService.deleteCustomer(req.params.id);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // === Controller cho Admin quản lý Nhân Viên ===
 
 const getAllEmployees = async (req, res, next) => {
   try {
+    // Gọi hàm service mà không truyền tham số
     const employees = await userService.getAllEmployees();
+    // Trả về dữ liệu theo đúng cấu trúc { data: [...] }
     res.status(200).json({ data: employees });
   } catch (error) {
     next(error);
@@ -113,6 +126,15 @@ const updateEmployee = async (req, res, next) => {
   }
 };
 
+const deleteEmployee = async (req, res, next) => {
+  try {
+    const result = await userService.deleteEmployee(req.params.id);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getMyProfile,
   updateMyProfile,
@@ -123,4 +145,6 @@ module.exports = {
   getEmployeeById,
   createEmployee,
   updateEmployee,
+  deleteCustomer,
+  deleteEmployee,
 };

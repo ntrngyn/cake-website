@@ -2,18 +2,86 @@
 import axiosClient from './axiosClient';
 import { ApiResponse, User } from '../types';
 
-// Định nghĩa kiểu dữ liệu cho form cập nhật
-// Chúng ta chỉ cho phép cập nhật một vài trường
+// === Dành cho Người dùng (User-facing) ===
 interface UpdateProfileData {
-  hotenKH?: string;
-  sdtKH?: string;
-  diachiKH?: string;
+  hotenKH?: string; sdtKH?: string; diachiKH?: string; hotenNV?: string;
+}
+
+// === Dành cho Quản trị viên (Admin-facing) ===
+export interface UserFormData {
+  id?: number;
+  hoten?: string;
+  taikhoan?: string;
+  email?: string;
+  matkhau?: string;
+  role?: string;
+  type?: 'customer' | 'employee';
 }
 
 export const userApi = {
-  // Hàm cập nhật thông tin cá nhân
+  // --- Hàm cho trang Profile ---
   updateProfile: (data: UpdateProfileData): Promise<ApiResponse<User>> => {
-    const url = '/users/me';
-    return axiosClient.put(url, data).then(res => res.data);
+    return axiosClient.put('/users/me', data).then(res => res.data);
+  },
+
+  // --- HÀM CHO TRANG QUẢN LÝ TÀI KHOẢN ---
+  getAllUsers: async (): Promise<User[]> => {
+    const [customerRes, employeeRes] = await Promise.all([
+      axiosClient.get('/users/customers'),
+      axiosClient.get('/users/employees')
+    ]);
+
+    // Sửa lỗi "No rows": Chỉ truy cập .data một lần
+    const customers = customerRes.data.data.map((user: any) => ({
+      ...user, id: user.idKH, hoten: user.hotenKH, email: user.emailKH, role: 'Khách Hàng', type: 'customer'
+    }));
+    const employees = employeeRes.data.data.map((user: any) => ({
+      ...user, id: user.idNV, hoten: user.hotenNV, email: user.emailNV, role: user.chucvuNV, type: 'employee'
+    }));
+    
+    return [...customers, ...employees];
+  },
+
+  // --- HÀM TẠO MỚI ĐÚNG ---
+  createUser: (userData: UserFormData): Promise<User> => {
+    let backendData;
+    let endpoint;
+
+    if (userData.role === 'KhachHang') {
+      endpoint = '/auth/register';
+      // Gửi đúng tên trường cho Khách Hàng
+      backendData = {
+        hotenKH: userData.hoten,
+        taikhoanKH: userData.taikhoan,
+        emailKH: userData.email,
+        matkhauKH: userData.matkhau,
+      };
+    } else {
+      endpoint = '/users/employees';
+      // Gửi đúng tên trường cho Nhân Viên
+      backendData = {
+        hotenNV: userData.hoten,
+        emailNV: userData.email,
+        matkhauNV: userData.matkhau,
+        chucvuNV: userData.role,
+      };
+    }
+    
+    return axiosClient.post(endpoint, backendData);
+  },
+
+  // --- HÀM CẬP NHẬT ĐÚNG ---
+  updateUser: (id: number, type: 'customer' | 'employee', userData: UserFormData): Promise<User> => {
+    const backendData = type === 'customer'
+      ? { hotenKH: userData.hoten }
+      : { hotenNV: userData.hoten, chucvuNV: userData.role };
+    const endpoint = type === 'customer' ? `/users/customers/${id}` : `/users/employees/${id}`;
+    return axiosClient.put(endpoint, backendData);
+  },
+
+  // --- HÀM XÓA ĐÚNG ---
+  deleteUser: (id: number, type: 'customer' | 'employee'): Promise<void> => {
+    const endpoint = type === 'customer' ? `/users/customers/${id}` : `/users/employees/${id}`;
+    return axiosClient.delete(endpoint);
   },
 };

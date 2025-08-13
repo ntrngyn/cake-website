@@ -23,10 +23,11 @@ import Button from "@mui/material/Button";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CakeIcon from "@mui/icons-material/Cake";
-import CategoryIcon from "@mui/icons-material/Category"; // Thêm icon
-import ScienceIcon from "@mui/icons-material/Science"; // Thêm icon
-import InventoryIcon from "@mui/icons-material/Inventory"; // Thêm icon
-import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing"; // Thêm icon
+import CategoryIcon from "@mui/icons-material/Category";
+import ScienceIcon from "@mui/icons-material/Science";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 
 const drawerWidth = 240;
 
@@ -45,6 +46,7 @@ const menuItems = [
     path: "production",
     icon: <PrecisionManufacturingIcon />,
   },
+  { text: "Quản lý Tài khoản", path: "users", icon: <ManageAccountsIcon /> },
 ];
 
 export default function AdminLayout() {

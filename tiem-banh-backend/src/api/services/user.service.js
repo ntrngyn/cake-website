@@ -12,14 +12,13 @@ const getMyProfile = async (userId, userRole) => {
 
   if (userRole === "KhachHang") {
     user = await db.KhachHang.findByPk(userId);
-    if (!user) throw new ApiError(404, "Người dùng không tồn tại.");
+    if (!user) throw new Error("Người dùng không tồn tại.");
 
     const { matkhauKH, ...rest } = user.get({ plain: true });
     finalUserObject = { ...rest, role: "KhachHang" };
   } else {
-    // Nhân viên
     user = await db.NhanVien.findByPk(userId);
-    if (!user) throw new ApiError(404, "Người dùng không tồn tại.");
+    if (!user) throw new Error("Người dùng không tồn tại.");
 
     const { matkhauNV, chucvuNV, ...rest } = user.get({ plain: true });
     finalUserObject = { ...rest, role: chucvuNV };
@@ -80,6 +79,12 @@ const updateCustomer = async (id, data) => {
   return customer;
 };
 
+const deleteCustomer = async (id) => {
+  const customer = await getCustomerById(id); // Dùng lại hàm có sẵn để kiểm tra tồn tại
+  await customer.destroy(); // Phương thức xóa của Sequelize
+  return { message: "Xóa khách hàng thành công." };
+};
+
 // Quản lý Nhân Viên
 const getAllEmployees = async () => {
   return await db.NhanVien.findAll({ attributes: { exclude: ["matkhauNV"] } });
@@ -121,6 +126,12 @@ const updateEmployee = async (id, data) => {
   return employee;
 };
 
+const deleteEmployee = async (id) => {
+  const employee = await getEmployeeById(id); // Dùng lại hàm có sẵn
+  await employee.destroy();
+  return { message: "Xóa nhân viên thành công." };
+};
+
 module.exports = {
   getMyProfile,
   updateMyProfile,
@@ -131,4 +142,6 @@ module.exports = {
   getEmployeeById,
   createEmployee,
   updateEmployee,
+  deleteCustomer,
+  deleteEmployee,
 };

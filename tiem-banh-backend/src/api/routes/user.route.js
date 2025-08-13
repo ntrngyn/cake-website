@@ -37,6 +37,13 @@ router.put(
   authorize(managerRoles),
   userController.updateCustomer
 );
+// DELETE /api/users/customers/:id
+router.delete(
+  "/customers/:id",
+  verifyToken,
+  authorize(managerRoles),
+  userController.deleteCustomer
+);
 
 // --- Routes cho Admin quản lý Nhân Viên ---
 // GET /api/users/employees
@@ -66,6 +73,13 @@ router.put(
   verifyToken,
   authorize(adminOnly),
   userController.updateEmployee
+);
+// DELETE /api/users/employees/:id
+router.delete(
+  "/employees/:id",
+  verifyToken,
+  authorize(adminOnly),
+  userController.deleteEmployee
 );
 
 module.exports = router;

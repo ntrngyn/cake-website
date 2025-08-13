@@ -9,7 +9,15 @@ const register = async (req, res, next) => {
       data: newUser,
     });
   } catch (error) {
-    // Chuyển lỗi xuống middleware xử lý lỗi tập trung
+    // === NÂNG CẤP Ở ĐÂY ===
+    // Kiểm tra xem lỗi có phải là lỗi "Email đã tồn tại" không
+    if (error.message.includes("Email đã tồn tại")) {
+      // Trả về lỗi 400 với thông điệp rõ ràng
+      return res.status(400).json({
+        message: "Email này đã được sử dụng. Vui lòng chọn một email khác.",
+      });
+    }
+    // Chuyển các lỗi khác cho trình xử lý lỗi toàn cục
     next(error);
   }
 };
