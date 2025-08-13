@@ -206,7 +206,12 @@ export default function Navbar() {
   return (
     <>
       <AppBar position="sticky" sx={{ bgcolor: "white" }}>
-        <Toolbar sx={{ minHeight: "80px", paddingX: { xs: 2, md: "5%" } }}>
+        <Toolbar
+          sx={{
+            minHeight: { xs: "80px", md: "96px" },
+            paddingX: { xs: 2, md: "5%" },
+          }}
+        >
           {/* Nút Hamburger cho Mobile */}
           <IconButton
             color="inherit"
@@ -238,7 +243,7 @@ export default function Navbar() {
             }}
           >
             {/* Các link bên trái */}
-            <Box sx={{ flexGrow: 1 }}>
+            <Box sx={{ flexGrow: 1, marginLeft: 4 }}>
               <Button
                 color="inherit"
                 onClick={handleProductMenuClick} /* ... */
@@ -307,19 +312,18 @@ export default function Navbar() {
             </Box>
 
             {/* Các nút bên phải */}
+            {!isEmployee && (
+              <IconButton
+                component={RouterLink}
+                to="/cart"
+                className={styles.iconButton}
+              >
+                <Badge badgeContent={cartItemCount} color="error">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+            )}
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              {!isEmployee && (
-                <IconButton
-                  component={RouterLink}
-                  to="/cart"
-                  className={styles.iconButton}
-                >
-                  <Badge badgeContent={cartItemCount} color="error">
-                    <ShoppingCartIcon />
-                  </Badge>
-                </IconButton>
-              )}
-
               {isAuthenticated ? (
                 <>
                   <Button
@@ -359,6 +363,15 @@ export default function Navbar() {
                 </>
               )}
             </Box>
+          </Box>
+          <Box sx={{ display: { xs: "block", md: "none" } }}>
+            {!isEmployee && (
+              <IconButton component={RouterLink} to="/cart" /* ... */>
+                <Badge badgeContent={cartItemCount} color="error">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+            )}
           </Box>
         </Toolbar>
       </AppBar>

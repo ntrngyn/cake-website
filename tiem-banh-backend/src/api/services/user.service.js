@@ -33,9 +33,30 @@ const updateMyProfile = async (userId, userRole, data) => {
   // Không cho phép cập nhật vai trò hoặc mật khẩu qua API này
   const { chucvuNV, matkhauKH, matkhauNV, ...updateData } = data;
 
-  const user = await getMyProfile(userId, userRole); // Dùng lại hàm trên để lấy user
-  await user.update(updateData);
-  return user;
+  let userToUpdate;
+
+  // 1. Tìm đúng instance Sequelize dựa trên vai trò
+  if (userRole === "KhachHang") {
+    userToUpdate = await db.KhachHang.findByPk(userId);
+  } else {
+    // Các vai trò khác được xem là Nhân viên
+    userToUpdate = await db.NhanVien.findByPk(userId);
+  }
+
+  // 2. Kiểm tra nếu không tìm thấy người dùng
+  if (!userToUpdate) {
+    // Có thể bạn muốn dùng ApiError ở đây
+    throw new Error("Người dùng không tồn tại.");
+  }
+
+  // 3. Thực hiện cập nhật trên instance Sequelize
+  // Bây giờ userToUpdate chắc chắn có phương thức .update()
+  await userToUpdate.update(updateData);
+
+  // 4. Trả về người dùng đã được cập nhật (đã bỏ mật khẩu)
+  // Bạn có thể gọi lại getMyProfile ở đây nếu muốn trả về dữ liệu đã được xử lý
+  const updatedProfile = await getMyProfile(userId, userRole);
+  return updatedProfile;
 };
 
 // === Cho Admin quản lý ===
