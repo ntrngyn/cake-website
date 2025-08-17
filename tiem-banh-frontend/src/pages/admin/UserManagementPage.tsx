@@ -250,18 +250,6 @@ export default function UserManagementPage() {
             />
             <TextField
               margin="dense"
-              label="Tên Tài Khoản"
-              type="text"
-              fullWidth
-              required
-              disabled={isEditMode}
-              value={currentUser?.taikhoan || ""}
-              onChange={(e) =>
-                setCurrentUser({ ...currentUser, taikhoan: e.target.value })
-              }
-            />
-            <TextField
-              margin="dense"
               label="Mật Khẩu"
               type="password"
               fullWidth

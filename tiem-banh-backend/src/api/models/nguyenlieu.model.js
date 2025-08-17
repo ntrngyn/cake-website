@@ -13,13 +13,11 @@ module.exports = (sequelize) => {
       tenNL: {
         type: DataTypes.STRING(100),
         allowNull: false,
+        unique: true,
       },
       donviNL: {
         type: DataTypes.STRING(50),
       },
-      // gianhapNL: {
-      //   type: DataTypes.DECIMAL(10, 2),
-      // },
       soluongtonNL: {
         type: DataTypes.DECIMAL(10, 2),
       },

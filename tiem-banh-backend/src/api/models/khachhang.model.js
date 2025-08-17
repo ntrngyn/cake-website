@@ -23,11 +23,6 @@ module.exports = (sequelize) => {
       diachiKH: {
         type: DataTypes.STRING(255),
       },
-      taikhoanKH: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        unique: true,
-      },
       matkhauKH: {
         type: DataTypes.STRING(255),
         allowNull: false,

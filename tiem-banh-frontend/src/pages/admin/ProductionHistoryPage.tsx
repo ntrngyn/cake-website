@@ -1,10 +1,11 @@
 // src/pages/admin/ProductionHistoryPage.tsx
 import { useState, useEffect } from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Paper } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { toast } from "react-toastify";
 import { productionApi, ProductionBatch } from "../../api/productionApi";
 import ProductionFormModal from "../../components/admin/ProductionFormModal";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function ProductionHistoryPage() {
   const [batches, setBatches] = useState<ProductionBatch[]>([]);
@@ -105,15 +106,31 @@ export default function ProductionHistoryPage() {
   ];
 
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
-        Lịch Sử Sản Xuất
-      </Typography>
-      {/* THÊM NÚT ĐỂ MỞ MODAL */}
-      <Button variant="contained" sx={{ mb: 2 }} onClick={handleOpenModal}>
-        Tạo Lô Sản Xuất Mới
-      </Button>
-      <Box sx={{ height: 600, width: "100%" }}>
+    // SỬ DỤNG <Paper> LÀM COMPONENT BAO BỌC NGOÀI CÙNG
+    <Paper sx={{ p: 3, width: "100%" }}>
+      {/* Tiêu đề và nút bấm được nhóm riêng */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
+        <Typography variant="h4" component="h1" gutterBottom>
+          Lịch Sử Sản Xuất
+        </Typography>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleOpenModal}
+        >
+          Tạo Lô Sản Xuất Mới
+        </Button>
+      </Box>
+
+      {/* Bảng dữ liệu được đặt trong một Box có chiều cao cố định */}
+      <Box sx={{ height: 650, width: "100%" }}>
         <DataGrid
           rows={batches}
           columns={columns}
@@ -121,12 +138,13 @@ export default function ProductionHistoryPage() {
           loading={loading}
         />
       </Box>
-      {/* RENDER MODAL VÀ TRUYỀN PROPS VÀO */}
+
+      {/* Modal không nằm trong Paper, nó sẽ hiển thị đè lên trên */}
       <ProductionFormModal
         open={isModalOpen}
         onClose={handleCloseModal}
         onSuccess={handleSuccess}
       />
-    </Box>
+    </Paper>
   );
 }

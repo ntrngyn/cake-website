@@ -1,12 +1,13 @@
 // src/pages/admin/IngredientManagementPage.tsx
 import { useState, useEffect } from "react";
-import { Box, Button, Typography, IconButton } from "@mui/material";
+import { Box, Button, Typography, IconButton, Paper } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { toast } from "react-toastify";
 import { ingredientApi, Ingredient } from "../../api/ingredientApi";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IngredientFormModal from "../../components/admin/IngredientFormModal";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function IngredientManagementPage() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -30,18 +31,24 @@ export default function IngredientManagementPage() {
   useEffect(() => {
     fetchIngredients();
   }, []);
-  const handleDelete = async (id: number) => {
+  // Phiên bản đã được sửa lỗi
+  const handleDelete = async (id: number, name: string) => {
+    // Sử dụng tên nguyên liệu trong thông điệp xác nhận
     if (
       window.confirm(
-        "Bạn có chắc chắn muốn xóa loại bánh này? (Các sản phẩm thuộc loại này sẽ không bị ảnh hưởng)"
+        `Bạn có chắc chắn muốn xóa nguyên liệu "${name}"?\nHành động này không thể hoàn tác.`
       )
     ) {
       try {
         await ingredientApi.remove(id);
-        toast.success("Xóa loại bánh thành công!");
+        toast.success(`Xóa nguyên liệu "${name}" thành công!`);
         fetchIngredients();
-      } catch (error) {
-        toast.error("Xóa thất bại. Có thể loại bánh này đang được sử dụng.");
+      } catch (error: any) {
+        // Hiển thị lỗi cụ thể từ backend nếu có
+        const errorMessage =
+          error.response?.data?.message ||
+          "Xóa thất bại. Có thể nguyên liệu này đang được sử dụng trong một công thức.";
+        toast.error(errorMessage);
       }
     }
   };
@@ -85,7 +92,10 @@ export default function IngredientManagementPage() {
           <IconButton onClick={() => handleOpenEditModal(params.row)}>
             <EditIcon />
           </IconButton>
-          <IconButton onClick={() => handleDelete(params.row.idNL)}>
+          <IconButton
+            color="error"
+            onClick={() => handleDelete(params.row.idNL, params.row.tenNL)}
+          >
             <DeleteIcon />
           </IconButton>
         </>
@@ -94,18 +104,31 @@ export default function IngredientManagementPage() {
   ];
 
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
-        Quản Lý Nguyên Liệu
-      </Typography>
-      <Button
-        variant="contained"
-        sx={{ mb: 2 }}
-        onClick={handleOpenCreateModal}
+    // SỬ DỤNG <Paper> LÀM COMPONENT BAO BỌC NGOÀI CÙNG
+    <Paper sx={{ p: 3, width: "100%" }}>
+      {/* Tiêu đề và nút bấm được nhóm riêng */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
       >
-        Thêm Nguyên Liệu Mới
-      </Button>
-      <Box sx={{ height: 600, width: "100%" }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Quản Lý Nguyên Liệu
+        </Typography>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleOpenCreateModal}
+        >
+          Thêm Nguyên Liệu Mới
+        </Button>
+      </Box>
+
+      {/* Bảng dữ liệu được đặt trong một Box có chiều cao cố định */}
+      <Box sx={{ height: 650, width: "100%" }}>
         <DataGrid
           rows={ingredients}
           columns={columns}
@@ -113,12 +136,14 @@ export default function IngredientManagementPage() {
           loading={loading}
         />
       </Box>
+
+      {/* Modal không nằm trong Paper, nó sẽ hiển thị đè lên trên */}
       <IngredientFormModal
         open={isModalOpen}
         onClose={handleCloseModal}
         onSuccess={handleSuccess}
         ingredientToEdit={editingIngredient}
       />
-    </Box>
+    </Paper>
   );
 }

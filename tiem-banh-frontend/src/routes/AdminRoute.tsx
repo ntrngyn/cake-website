@@ -15,6 +15,18 @@ export default function AdminRoute({
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const location = useLocation();
 
+  // === THÊM CÁC DÒNG DEBUG VÀO ĐÂY ===
+  // console.group("--- AdminRoute Check ---");
+  // console.log("Đang ở trang:", location.pathname);
+  // console.log("Đã đăng nhập?", isAuthenticated);
+  // console.log("Đối tượng user từ Redux:", user);
+  // console.log("Vai trò của user:", user?.role);
+  // console.log("Các vai trò được phép:", allowedRoles);
+  const isAllowed = user ? allowedRoles.includes(user.role) : false;
+  // console.log("Kết quả kiểm tra (isAllowed):", isAllowed);
+  // console.groupEnd();
+  // ===================================
+
   // Logic đã được đơn giản hóa tối đa
   // Vì App.tsx đã xử lý trạng thái loading,
   // nên khi code chạy đến đây, chúng ta có thể tin rằng
@@ -26,7 +38,7 @@ export default function AdminRoute({
   }
 
   // 2. Nếu không có user object hoặc vai trò không đúng -> về trang chủ
-  if (!user || !allowedRoles.includes(user.role)) {
+  if (!isAllowed) {
     return <Navigate to="/" replace />;
   }
 

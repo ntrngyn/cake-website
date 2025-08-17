@@ -6,7 +6,8 @@ const orderController = require("../controllers/order.controller");
 const { verifyToken, authorize } = require("../middlewares/auth.middleware");
 
 const customerRole = ["KhachHang"];
-const employeeRoles = ["Admin", "Quản lý", "Nhân viên bán hàng"];
+// --- SỬA LẠI TÊN VAI TRÒ Ở ĐÂY ---
+const employeeRoles = ["Admin", "Quản lý", "NhanVien"]; // Đổi "Nhân viên bán hàng" thành "NhanVien"
 
 // POST /api/orders - Khách hàng tạo đơn hàng
 router.post(
@@ -28,7 +29,7 @@ router.get(
 router.get(
   "/",
   verifyToken,
-  authorize(employeeRoles),
+  authorize(employeeRoles), // <-- Bây giờ sẽ hoạt động cho NhanVien
   orderController.getAllOrders
 );
 
@@ -39,7 +40,7 @@ router.get("/:idDH", verifyToken, orderController.getOrderById);
 router.put(
   "/:idDH/status",
   verifyToken,
-  authorize(employeeRoles),
+  authorize(employeeRoles), // <-- Bây giờ sẽ hoạt động cho NhanVien
   orderController.updateOrderStatus
 );
 

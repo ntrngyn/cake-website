@@ -11,7 +11,6 @@ interface UpdateProfileData {
 export interface UserFormData {
   id?: number;
   hoten?: string;
-  taikhoan?: string;
   email?: string;
   matkhau?: string;
   role?: string;
@@ -49,16 +48,13 @@ export const userApi = {
 
     if (userData.role === 'KhachHang') {
       endpoint = '/auth/register';
-      // Gửi đúng tên trường cho Khách Hàng
       backendData = {
         hotenKH: userData.hoten,
-        taikhoanKH: userData.taikhoan,
         emailKH: userData.email,
         matkhauKH: userData.matkhau,
       };
     } else {
       endpoint = '/users/employees';
-      // Gửi đúng tên trường cho Nhân Viên
       backendData = {
         hotenNV: userData.hoten,
         emailNV: userData.email,
@@ -70,7 +66,7 @@ export const userApi = {
     return axiosClient.post(endpoint, backendData);
   },
 
-  // --- HÀM CẬP NHẬT ĐÚNG ---
+  // --- HÀM CẬP NHẬT ---
   updateUser: (id: number, type: 'customer' | 'employee', userData: UserFormData): Promise<User> => {
     const backendData = type === 'customer'
       ? { hotenKH: userData.hoten }
@@ -79,7 +75,7 @@ export const userApi = {
     return axiosClient.put(endpoint, backendData);
   },
 
-  // --- HÀM XÓA ĐÚNG ---
+  // --- HÀM XÓA ---
   deleteUser: (id: number, type: 'customer' | 'employee'): Promise<void> => {
     const endpoint = type === 'customer' ? `/users/customers/${id}` : `/users/employees/${id}`;
     return axiosClient.delete(endpoint);

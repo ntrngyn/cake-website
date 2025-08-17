@@ -137,6 +137,7 @@ export default function CartPage() {
                   VND
                 </Typography>
                 <IconButton
+                  color="error"
                   onClick={() => handleRemoveItem(item.idBANH)}
                   sx={{ ml: 2 }}
                 >

@@ -1,6 +1,7 @@
 // src/components/layout/AdminLayout.tsx
 import { NavLink, Outlet } from "react-router-dom";
-import { useAppDispatch } from "../../hooks/useRedux";
+// --- THÊM IMPORT useAppSelector ---
+import { useAppSelector, useAppDispatch } from "../../hooks/useRedux";
 import { logout } from "../../redux/authSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -31,27 +32,63 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 
 const drawerWidth = 240;
 
-// Danh sách các mục menu
-const menuItems = [
-  // Sử dụng '.' để trỏ đến index route của layout cha
-  { text: "Dashboard", path: ".", icon: <DashboardIcon /> },
-  // Sử dụng đường dẫn tương đối (không có / ở đầu)
-  { text: "Quản lý Đơn hàng", path: "orders", icon: <ShoppingCartIcon /> },
-  { text: "Quản lý Sản phẩm", path: "products", icon: <CakeIcon /> },
-  { text: "Quản lý Loại bánh", path: "categories", icon: <CategoryIcon /> },
-  { text: "Quản lý Nguyên liệu", path: "ingredients", icon: <ScienceIcon /> },
-  { text: "Quản lý Nhập kho", path: "inventory", icon: <InventoryIcon /> },
+// Danh sách TẤT CẢ các mục menu có thể có
+const allMenuItems = [
+  {
+    text: "Dashboard",
+    path: ".",
+    icon: <DashboardIcon />,
+    allowedRoles: ["Admin", "Quản lý"],
+  },
+  {
+    text: "Quản lý Đơn hàng",
+    path: "orders",
+    icon: <ShoppingCartIcon />,
+    allowedRoles: ["Admin", "Quản lý", "NhanVien"],
+  },
+  {
+    text: "Quản lý Sản phẩm",
+    path: "products",
+    icon: <CakeIcon />,
+    allowedRoles: ["Admin", "Quản lý", "NhanVien"],
+  },
+  {
+    text: "Quản lý Loại bánh",
+    path: "categories",
+    icon: <CategoryIcon />,
+    allowedRoles: ["Admin", "Quản lý"],
+  },
+  {
+    text: "Quản lý Nguyên liệu",
+    path: "ingredients",
+    icon: <ScienceIcon />,
+    allowedRoles: ["Admin", "Quản lý kho"],
+  },
+  {
+    text: "Quản lý Nhập kho",
+    path: "inventory",
+    icon: <InventoryIcon />,
+    allowedRoles: ["Admin", "Quản lý kho"],
+  },
   {
     text: "Quản lý Sản xuất",
     path: "production",
     icon: <PrecisionManufacturingIcon />,
+    allowedRoles: ["Admin", "Thợ làm bánh"],
   },
-  { text: "Quản lý Tài khoản", path: "users", icon: <ManageAccountsIcon /> },
+  {
+    text: "Quản lý Tài khoản",
+    path: "users",
+    icon: <ManageAccountsIcon />,
+    allowedRoles: ["Admin"],
+  },
 ];
 
 export default function AdminLayout() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  // --- BƯỚC 1: LẤY THÔNG TIN USER TỪ REDUX STORE ---
+  const { user } = useAppSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -59,10 +96,17 @@ export default function AdminLayout() {
     navigate("/login");
   };
 
+  // --- BƯỚC 2: LỌC RA CÁC MỤC MENU MÀ USER CÓ QUYỀN TRUY CẬP ---
+  const accessibleMenuItems = allMenuItems.filter(
+    (item) =>
+      // Kiểm tra xem user có tồn tại, có vai trò, và vai trò đó có trong danh sách được phép không
+      user?.role && item.allowedRoles.includes(user.role)
+  );
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      {/* Header */}
+      {/* Header (Giữ nguyên) */}
       <AppBar
         position="fixed"
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -92,21 +136,17 @@ export default function AdminLayout() {
         <Toolbar />
         <Box sx={{ overflow: "auto" }}>
           <List>
-            {menuItems.map((item) => (
-              // BƯỚC 1: BỌC ListItem BẰNG NavLink
+            {/* BƯỚC 3: SỬ DỤNG MẢNG ĐÃ ĐƯỢC LỌC ĐỂ RENDER */}
+            {accessibleMenuItems.map((item) => (
               <NavLink
                 key={item.text}
                 to={item.path}
-                end={item.path === "."} // end=true cho index route
+                end={item.path === "."}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
-                {(
-                  { isActive } // <-- NavLink cung cấp isActive qua render prop
-                ) => (
+                {({ isActive }) => (
                   <ListItem disablePadding>
                     <ListItemButton selected={isActive}>
-                      {" "}
-                      {/* <-- SỬ DỤNG PROP 'selected' */}
                       <ListItemIcon>{item.icon}</ListItemIcon>
                       <ListItemText primary={item.text} />
                     </ListItemButton>
@@ -118,10 +158,9 @@ export default function AdminLayout() {
         </Box>
       </Drawer>
 
-      {/* Vùng nội dung chính */}
+      {/* Vùng nội dung chính (Giữ nguyên) */}
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
-        {/* Đây là nơi nội dung của các trang con sẽ được hiển thị */}
         <Outlet />
       </Box>
     </Box>

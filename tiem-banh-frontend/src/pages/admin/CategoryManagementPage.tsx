@@ -1,12 +1,13 @@
 // src/pages/admin/CategoryManagementPage.tsx
 import { useState, useEffect } from "react";
-import { Box, Button, Typography, IconButton } from "@mui/material";
+import { Box, Button, Typography, IconButton, Paper } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { toast } from "react-toastify";
 import { categoryApi, Category } from "../../api/categoryApi";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CategoryFormModal from "../../components/admin/CategoryFormModal";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function CategoryManagementPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -76,7 +77,10 @@ export default function CategoryManagementPage() {
           <IconButton onClick={() => handleOpenEditModal(params.row)}>
             <EditIcon />
           </IconButton>
-          <IconButton onClick={() => handleDelete(params.row.idLB)}>
+          <IconButton
+            color="error"
+            onClick={() => handleDelete(params.row.idLB)}
+          >
             <DeleteIcon />
           </IconButton>
         </>
@@ -85,18 +89,31 @@ export default function CategoryManagementPage() {
   ];
 
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
-        Quản Lý Loại Bánh
-      </Typography>
-      <Button
-        variant="contained"
-        sx={{ mb: 2 }}
-        onClick={handleOpenCreateModal}
+    // SỬ DỤNG <Paper> LÀM COMPONENT BAO BỌC NGOÀI CÙNG
+    <Paper sx={{ p: 3, width: "100%" }}>
+      {/* Tiêu đề và nút bấm được nhóm riêng */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
       >
-        Thêm Loại Bánh Mới
-      </Button>
-      <Box sx={{ height: 600, width: "100%" }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Quản Lý Loại Bánh
+        </Typography>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleOpenCreateModal}
+        >
+          Thêm Loại Bánh Mới
+        </Button>
+      </Box>
+
+      {/* Bảng dữ liệu được đặt trong một Box có chiều cao cố định */}
+      <Box sx={{ height: 650, width: "100%" }}>
         <DataGrid
           rows={categories}
           columns={columns}
@@ -104,12 +121,14 @@ export default function CategoryManagementPage() {
           loading={loading}
         />
       </Box>
+
+      {/* Modal không nằm trong Paper, nó sẽ hiển thị đè lên trên */}
       <CategoryFormModal
         open={isModalOpen}
         onClose={handleCloseModal}
         onSuccess={handleSuccess}
         categoryToEdit={editingCategory}
       />
-    </Box>
+    </Paper>
   );
 }

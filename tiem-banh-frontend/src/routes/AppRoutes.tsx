@@ -37,7 +37,7 @@ const employeeRoles = [
   "Admin",
   "Quản lý",
   "Quản lý kho",
-  "Nhân viên bán hàng",
+  "NhanVien",
   "Thợ làm bánh",
 ];
 

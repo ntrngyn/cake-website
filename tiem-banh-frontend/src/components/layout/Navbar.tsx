@@ -48,16 +48,7 @@ export default function Navbar() {
     state.cart.cartItems.reduce((count, item) => count + item.quantity, 0)
   );
 
-  // --- BẮT ĐẦU DEBUG ---
-  console.group("--- NAVBAR RENDER ---");
-  console.log("isAuthenticated:", isAuthenticated);
-  console.log("user object:", user);
-  console.log("user?.role:", user?.role);
-
   const isEmployee = user ? user.role !== "KhachHang" : false;
-
-  console.log("Calculated isEmployee:", isEmployee);
-  console.groupEnd();
 
   // State cho dropdown sản phẩm
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

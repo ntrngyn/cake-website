@@ -4,16 +4,21 @@ const router = express.Router();
 const statusController = require("../controllers/status.controller.js");
 const { verifyToken, authorize } = require("../middlewares/auth.middleware");
 
-// Bất kỳ nhân viên nào cũng cần xem danh sách này để cập nhật đơn hàng
+// --- SỬA LẠI TÊN CÁC VAI TRÒ Ở ĐÂY ---
 const employeeRoles = [
   "Admin",
   "Quản lý",
   "Quản lý kho",
-  "Nhân viên bán hàng",
+  "NhanVien",
   "Thợ làm bánh",
 ];
 
 // Định nghĩa endpoint GET /
-router.get("/", verifyToken, authorize(employeeRoles), statusController.getAll);
+router.get(
+  "/",
+  verifyToken,
+  authorize(employeeRoles), // <-- Bây giờ sẽ hoạt động cho NhanVien
+  statusController.getAll
+);
 
 module.exports = router;

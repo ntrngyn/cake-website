@@ -1,10 +1,11 @@
 // src/pages/admin/ProductManagementPage.tsx
 import { useState, useEffect } from "react";
-import { Box, Button, Typography, IconButton } from "@mui/material";
+import { Box, Button, Typography, IconButton, Paper } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { toast } from "react-toastify";
 import { cakeApi, Cake } from "../../api/cakeApi";
 import { AxiosError } from "axios";
+import AddIcon from "@mui/icons-material/Add";
 
 // MUI Icons
 import EditIcon from "@mui/icons-material/Edit";
@@ -110,7 +111,10 @@ export default function ProductManagementPage() {
           <IconButton onClick={() => handleOpenEditModal(params.row)}>
             <EditIcon />
           </IconButton>
-          <IconButton onClick={() => handleDelete(params.row.idBANH)}>
+          <IconButton
+            color="error"
+            onClick={() => handleDelete(params.row.idBANH)}
+          >
             <DeleteIcon />
           </IconButton>
         </>
@@ -119,19 +123,31 @@ export default function ProductManagementPage() {
   ];
 
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
-        Quản Lý Sản Phẩm
-      </Typography>
-      {/* BƯỚC 5: GẮN HÀM XỬ LÝ VÀO NÚT THÊM MỚI */}
-      <Button
-        variant="contained"
-        sx={{ mb: 2 }}
-        onClick={handleOpenCreateModal}
+    // SỬ DỤNG <Paper> LÀM COMPONENT BAO BỌC NGOÀI CÙNG
+    <Paper sx={{ p: 3, width: "100%" }}>
+      {/* Tiêu đề và nút bấm được nhóm riêng */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
       >
-        Thêm Sản Phẩm Mới
-      </Button>
-      <Box sx={{ height: 600, width: "100%" }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Quản Lý Sản Phẩm
+        </Typography>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleOpenCreateModal}
+        >
+          Thêm Sản Phẩm Mới
+        </Button>
+      </Box>
+
+      {/* Bảng dữ liệu được đặt trong một Box có chiều cao cố định */}
+      <Box sx={{ height: 650, width: "100%" }}>
         <DataGrid
           rows={cakes}
           columns={columns}
@@ -140,13 +156,13 @@ export default function ProductManagementPage() {
         />
       </Box>
 
-      {/* BƯỚC 6: RENDER MODAL VÀ TRUYỀN CÁC PROPS CẦN THIẾT */}
+      {/* Modal không nằm trong Paper, nó sẽ hiển thị đè lên trên */}
       <ProductFormModal
         open={isModalOpen}
         onClose={handleCloseModal}
         onSuccess={handleSuccess}
         cakeToEdit={editingCake}
       />
-    </Box>
+    </Paper>
   );
 }

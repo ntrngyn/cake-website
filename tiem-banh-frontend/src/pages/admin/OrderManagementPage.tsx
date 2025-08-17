@@ -6,6 +6,7 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
+  Paper,
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { toast } from "react-toastify";
@@ -167,11 +168,15 @@ export default function OrderManagementPage() {
   ];
 
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
+    // BƯỚC 1: SỬ DỤNG <Paper> LÀM COMPONENT BAO BỌC NGOÀI CÙNG
+    <Paper sx={{ p: 3, width: "100%" }}>
+      {/* Tiêu đề trang */}
+      <Typography variant="h4" component="h1" gutterBottom>
         Quản Lý Đơn Hàng
       </Typography>
-      <Box sx={{ height: 600, width: "100%" }}>
+
+      {/* Bảng dữ liệu được đặt trong một Box có chiều cao cố định */}
+      <Box sx={{ height: 650, width: "100%", mt: 2 }}>
         <DataGrid
           rows={orders}
           columns={columns}
@@ -183,6 +188,6 @@ export default function OrderManagementPage() {
           pageSizeOptions={[5, 10, 20]}
         />
       </Box>
-    </Box>
+    </Paper>
   );
 }

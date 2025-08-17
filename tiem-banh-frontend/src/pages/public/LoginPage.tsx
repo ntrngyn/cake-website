@@ -21,11 +21,14 @@ import {
 
 // Kiểu dữ liệu và schema (giữ nguyên)
 type LoginFormInputs = {
-  taikhoan: string;
+  email: string;
   matkhau: string;
 };
 const schema = yup.object().shape({
-  taikhoan: yup.string().required("Tài khoản không được để trống"),
+  email: yup
+    .string()
+    .email("Email không hợp lệ")
+    .required("Email không được để trống"),
   matkhau: yup.string().required("Mật khẩu không được để trống"),
 });
 
@@ -41,13 +44,22 @@ export default function LoginPage() {
   } = useForm<LoginFormInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
-      taikhoan: "",
+      email: "",
       matkhau: "",
     },
   });
 
   const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
-    dispatch(loginUser(data))
+    // data ở đây có dạng: { email: "...", matkhau: "..." }
+
+    // BƯỚC 1: Tạo một đối tượng mới với tên trường mà backend mong đợi
+    const credentials = {
+      taikhoan: data.email, // "Dịch" 'email' thành 'taikhoan'
+      matkhau: data.matkhau,
+    };
+
+    // BƯỚC 2: Gửi đối tượng đã được "dịch" đi
+    dispatch(loginUser(credentials))
       .unwrap()
       .then((result) => {
         const user = result.user as User;
@@ -57,10 +69,10 @@ export default function LoginPage() {
           }`
         );
 
-        if (user.role === "KhachHang") {
-          navigate("/");
-        } else {
+        if (user.role && user.role !== "KhachHang") {
           navigate("/admin");
+        } else {
+          navigate("/");
         }
       })
       .catch((errorMessage) => {
@@ -81,16 +93,16 @@ export default function LoginPage() {
         </Typography>
 
         <Controller
-          name="taikhoan"
+          name="email"
           control={control}
           render={({ field }) => (
             <TextField
               {...field}
-              label="Tên tài khoản hoặc Email"
+              label="Email"
               fullWidth
               margin="normal"
-              error={!!errors.taikhoan}
-              helperText={errors.taikhoan?.message}
+              error={!!errors.email}
+              helperText={errors.eamil?.message}
             />
           )}
         />
