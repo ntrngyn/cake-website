@@ -50,7 +50,3 @@ npm run dev
 ```
 
 > Trang web sẽ chạy tại `http://localhost:5173`
-
-## ✍️ Tác giả
-
-- **Nguyễn Trọng Nguyên** - _Sinh viên Khoa học Máy tính, Đại học Cần Thơ_
