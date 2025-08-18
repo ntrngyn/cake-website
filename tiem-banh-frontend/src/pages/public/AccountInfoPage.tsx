@@ -80,14 +80,14 @@ export default function AccountInfoPage() {
         Thông Tin Tài Khoản
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* Trường Tài khoản (chỉ đọc) */}
+        {/* Trường Tài khoản (chỉ đọc)
         <TextField
           label="Tên tài khoản"
           value={user?.taikhoanKH || ""}
           disabled
           fullWidth
           margin="normal"
-        />
+        /> */}
         {/* Trường Email (chỉ đọc) */}
         <TextField
           label="Email"

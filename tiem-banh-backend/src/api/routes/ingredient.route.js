@@ -4,7 +4,7 @@ const router = express.Router();
 const ingredientController = require("../controllers/ingredient.controller");
 const { verifyToken, authorize } = require("../middlewares/auth.middleware");
 
-const adminRoles = ["Admin", "Quản lý", "Quản lý kho"];
+const adminRoles = ["Admin", "Quản lý", "Quản lý kho", "NhanVien"];
 
 router.get(
   "/",
