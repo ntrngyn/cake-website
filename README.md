@@ -25,7 +25,7 @@ cd tiem-banh-backend
 # Cài đặt
 npm install
 
-# Sao chép file .env.example thành .env và cấu hình CSDL
+# Tạo file .env và cấu hình CSDL
 # Chạy script SQL để tạo database
 
 # Khởi động
